@@ -513,14 +513,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       zh: "绝地委员会指挥结构",
     },
     roomThemes: {
-      ceoOffice: { floor1: 0xf0e6d0, floor2: 0xe8dcc4, wall: 0x8a7a5a, accent: 0xc9a84c },
-      planning: { floor1: 0xede4d2, floor2: 0xe5dac6, wall: 0x7d6e4f, accent: 0xb8972e },
-      dev: { floor1: 0xe0d8c8, floor2: 0xd8cebb, wall: 0x6e6450, accent: 0x9e8a5c },
-      design: { floor1: 0xe8dfd0, floor2: 0xe0d5c4, wall: 0x786a52, accent: 0xb09060 },
-      qa: { floor1: 0xe5ddd0, floor2: 0xddd3c4, wall: 0x746858, accent: 0xa89070 },
-      devsecops: { floor1: 0xdcd5c5, floor2: 0xd4ccba, wall: 0x6a6050, accent: 0x8e7e5e },
-      operations: { floor1: 0xe2daca, floor2: 0xdad0be, wall: 0x706450, accent: 0xa09060 },
-      breakRoom: { floor1: 0xf0eada, floor2: 0xe8e0cc, wall: 0x8a8060, accent: 0xc0b070 },
+      ceoOffice: { floor1: 0xe8d8b4, floor2: 0xdecca4, wall: 0x9a7a3c, accent: 0xc43030 },
+      planning: { floor1: 0x3a4a68, floor2: 0x304060, wall: 0x1e2e50, accent: 0x4a90e0 },
+      dev: { floor1: 0xd0d4da, floor2: 0xc4c9d0, wall: 0x788090, accent: 0xa8b0c0 },
+      design: { floor1: 0x382e50, floor2: 0x2e2448, wall: 0x201838, accent: 0x8060d0 },
+      qa: { floor1: 0xc8c0b0, floor2: 0xbeb4a4, wall: 0x6b6358, accent: 0xb89850 },
+      devsecops: { floor1: 0xddd0a8, floor2: 0xd2c498, wall: 0x7a6830, accent: 0xd4a520 },
+      operations: { floor1: 0x283848, floor2: 0x203040, wall: 0x1c2838, accent: 0x40c8a0 },
+      breakRoom: { floor1: 0xc8d8c0, floor2: 0xbdd0b4, wall: 0x5c7858, accent: 0x60b468 },
     },
     departments: {
       planning: {
