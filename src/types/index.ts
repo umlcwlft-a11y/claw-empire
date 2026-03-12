@@ -31,6 +31,7 @@ export interface Agent {
   name_ja?: string | null;
   name_zh?: string | null;
   department_id: string | null;
+  workflow_pack_key?: WorkflowPackKey | null;
   department?: Department;
   role: AgentRole;
   acts_as_planning_leader?: number | null;

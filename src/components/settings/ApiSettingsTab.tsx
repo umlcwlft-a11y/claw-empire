@@ -234,7 +234,7 @@ export default function ApiSettingsTab({ t, localeTag, apiState }: ApiSettingsTa
                         preset_key: null,
                         type: key,
                         base_url: preset.base_url || prev.base_url,
-                        name: prev.preset_key ? preset.label : prev.name || preset.label,
+                        name: prev.name || preset.label,
                       }));
                     }}
                     className={`rounded-md border px-2.5 py-1 text-[11px] transition-colors ${

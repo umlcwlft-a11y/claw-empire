@@ -273,6 +273,19 @@ function validateOfficialPresetApiKey(preset: OfficialApiProviderPreset | null, 
   return null;
 }
 
+function resolveApiKeyForPresetValidation(params: {
+  officialPreset: OfficialApiProviderPreset | null;
+  incomingApiKey: string | null;
+  retainedEncryptedApiKey: string | null;
+  shouldReuseStoredKey: boolean;
+}): string {
+  const { officialPreset, incomingApiKey, retainedEncryptedApiKey, shouldReuseStoredKey } = params;
+  if (!officialPreset) return "";
+  if (incomingApiKey !== null) return incomingApiKey;
+  if (!shouldReuseStoredKey || !retainedEncryptedApiKey) return "";
+  return decryptSecret(retainedEncryptedApiKey);
+}
+
 function sendNotFound(res: Response): void {
   res.status(404).json({ error: "not_found" });
 }
@@ -361,6 +374,7 @@ export function registerApiProviderRoutes({ app, db, nowMs }: RegisterApiProvide
     const existingPresetKey = existingPreset?.key ?? null;
     const incomingApiKey = "api_key" in body ? (typeof body.api_key === "string" ? body.api_key.trim() : "") : null;
     const isPresetTransition = presetKeyInput != null && presetKeyInput.presetKey !== existingPresetKey;
+    const shouldReuseStoredKeyForValidation = incomingApiKey === null && isPresetTransition;
     const nextManualType = "type" in body && isApiProviderType(body.type) ? body.type : row.type;
     const nextManualBaseUrl =
       "base_url" in body && typeof body.base_url === "string" && body.base_url.trim()
@@ -378,8 +392,13 @@ export function registerApiProviderRoutes({ app, db, nowMs }: RegisterApiProvide
       params.push(body.name.trim());
     }
     if (officialPreset && (incomingApiKey !== null || isPresetTransition)) {
-      const retainedApiKey = row.api_key_enc ? decryptSecret(row.api_key_enc) : "";
-      const apiKeyError = validateOfficialPresetApiKey(officialPreset, incomingApiKey ?? retainedApiKey);
+      const apiKeyToValidate = resolveApiKeyForPresetValidation({
+        officialPreset,
+        incomingApiKey,
+        retainedEncryptedApiKey: row.api_key_enc,
+        shouldReuseStoredKey: shouldReuseStoredKeyForValidation,
+      });
+      const apiKeyError = validateOfficialPresetApiKey(officialPreset, apiKeyToValidate);
       if (apiKeyError) {
         return res.status(400).json({ error: apiKeyError });
       }

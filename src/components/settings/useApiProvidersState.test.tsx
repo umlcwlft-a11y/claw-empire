@@ -99,6 +99,11 @@ describe("useApiProvidersState model assignment", () => {
   });
 
   it("loads development departments when assigning an API model", async () => {
+    apiMocks.getAgents.mockResolvedValueOnce([
+      { id: "agent-dev", workflow_pack_key: "development" },
+      { id: "agent-video", workflow_pack_key: "video_preprod" },
+      { id: "agent-legacy" },
+    ]);
     const { result } = renderHook(() => useApiProvidersState({ tab: "api", t }));
 
     await waitFor(() => {
@@ -111,5 +116,9 @@ describe("useApiProvidersState model assignment", () => {
 
     expect(apiMocks.getAgents).toHaveBeenCalledTimes(1);
     expect(apiMocks.getDepartments).toHaveBeenCalledWith({ workflowPackKey: "development" });
+    expect(result.current.apiAssignAgents).toEqual([
+      { id: "agent-dev", workflow_pack_key: "development" },
+      { id: "agent-legacy" },
+    ]);
   });
 });

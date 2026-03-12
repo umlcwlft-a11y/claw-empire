@@ -154,11 +154,14 @@ describe("ApiSettingsTab", () => {
     render(<TestHarness />);
 
     await user.click(screen.getByRole("button", { name: /OpenCode Go \(OpenAI\)/ }));
+    const nameInput = screen.getByPlaceholderText("e.g. My OpenAI");
+    await user.clear(nameInput);
+    await user.type(nameInput, "Team Gateway");
     await user.click(screen.getByRole("button", { name: "Custom" }));
 
     const baseUrlInput = screen.getByPlaceholderText("https://api.openai.com/v1") as HTMLInputElement;
     expect(baseUrlInput.readOnly).toBe(false);
-    expect(screen.getByDisplayValue("Custom")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Team Gateway")).toBeInTheDocument();
   });
 
   it("shows preset badge and seeded models on provider cards", async () => {

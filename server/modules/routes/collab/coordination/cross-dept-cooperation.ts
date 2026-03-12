@@ -51,6 +51,9 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
     ensureTaskExecutionSession,
     getProviderModelConfig,
     spawnCliAgent,
+    launchApiProviderAgent,
+    launchHttpAgent,
+    getNextHttpAgentPid,
     handleSubtaskDelegationComplete,
     handleTaskRunComplete,
     startProgressTimer,
@@ -502,7 +505,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
 
       // Actually spawn the CLI agent
       const execProvider = execAgent.cli_provider || "claude";
-      if (["claude", "codex", "gemini", "opencode", "kimi"].includes(execProvider)) {
+      if (["claude", "codex", "gemini", "opencode", "kimi", "copilot", "antigravity", "api"].includes(execProvider)) {
         const crossTaskData = db.prepare("SELECT * FROM tasks WHERE id = ?").get(crossTaskId) as
           | {
               title: string;
@@ -561,29 +564,57 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
           ].join("\n");
 
           appendTaskLog(crossTaskId, "system", `RUN start (agent=${execAgent.name}, provider=${execProvider})`);
-          const crossModelConfig = getProviderModelConfig();
-          const crossModel = execAgent.cli_model || crossModelConfig[execProvider]?.model || undefined;
-          const crossReasoningLevel =
-            execProvider === "codex"
-              ? execAgent.cli_reasoning_level || crossModelConfig[execProvider]?.reasoningLevel || undefined
-              : crossModelConfig[execProvider]?.reasoningLevel || undefined;
-          const child = spawnCliAgent(
-            crossTaskId,
-            execProvider,
-            sessionPrompt,
-            projPath,
-            logFilePath,
-            crossModel,
-            crossReasoningLevel,
-          );
-          child.on("close", (code: number | null) => {
-            const linked = delegatedTaskToSubtask.get(crossTaskId);
-            if (linked) {
-              handleSubtaskDelegationComplete(crossTaskId, linked, code ?? 1);
-            } else {
-              handleTaskRunComplete(crossTaskId, code ?? 1);
-            }
-          });
+          if (execProvider === "api") {
+            const controller = new AbortController();
+            const fakePid = getNextHttpAgentPid();
+            launchApiProviderAgent(
+              crossTaskId,
+              execAgent.api_provider_id ?? null,
+              execAgent.api_model ?? null,
+              sessionPrompt,
+              projPath,
+              logFilePath,
+              controller,
+              fakePid,
+            );
+          } else if (execProvider === "copilot" || execProvider === "antigravity") {
+            const controller = new AbortController();
+            const fakePid = getNextHttpAgentPid();
+            launchHttpAgent(
+              crossTaskId,
+              execProvider,
+              sessionPrompt,
+              projPath,
+              logFilePath,
+              controller,
+              fakePid,
+              execAgent.oauth_account_id ?? null,
+            );
+          } else {
+            const crossModelConfig = getProviderModelConfig();
+            const crossModel = execAgent.cli_model || crossModelConfig[execProvider]?.model || undefined;
+            const crossReasoningLevel =
+              execProvider === "codex"
+                ? execAgent.cli_reasoning_level || crossModelConfig[execProvider]?.reasoningLevel || undefined
+                : crossModelConfig[execProvider]?.reasoningLevel || undefined;
+            const child = spawnCliAgent(
+              crossTaskId,
+              execProvider,
+              sessionPrompt,
+              projPath,
+              logFilePath,
+              crossModel,
+              crossReasoningLevel,
+            );
+            child.on("close", (code: number | null) => {
+              const linked = delegatedTaskToSubtask.get(crossTaskId);
+              if (linked) {
+                handleSubtaskDelegationComplete(crossTaskId, linked, code ?? 1);
+              } else {
+                handleTaskRunComplete(crossTaskId, code ?? 1);
+              }
+            });
+          }
 
           notifyCeo(
             pickL(
