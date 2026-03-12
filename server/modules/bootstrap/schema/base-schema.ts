@@ -368,6 +368,7 @@ CREATE TABLE IF NOT EXISTS api_providers (
   type TEXT NOT NULL DEFAULT 'openai' CHECK(type IN ('openai','anthropic','google','ollama','openrouter','together','groq','cerebras','custom')),
   base_url TEXT NOT NULL,
   api_key_enc TEXT,
+  preset_key TEXT,
   enabled INTEGER NOT NULL DEFAULT 1,
   models_cache TEXT,
   models_cached_at INTEGER,

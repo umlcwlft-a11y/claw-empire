@@ -728,6 +728,22 @@ Use only a plain executable + fixed args format (no shell/interpreter wrappers, 
 
 ## Provider Setup (CLI / OAuth / API)
 
+### Official API presets
+
+The **Settings > API** tab now includes four official direct-API presets:
+
+- `OpenCode Go (OpenAI)` -> `https://opencode.ai/zen/go/v1`
+- `OpenCode Go (Anthropic)` -> `https://opencode.ai/zen/go/v1`
+- `Alibaba Coding Plan (OpenAI)` -> `https://coding-intl.dashscope.aliyuncs.com/v1`
+- `Alibaba Coding Plan (Anthropic)` -> `https://coding-intl.dashscope.aliyuncs.com/apps/anthropic`
+
+Notes:
+
+- Alibaba Coding Plan API keys must start with `sk-sp-`.
+- These presets seed fallback model lists immediately so agents can be assigned even when live `/models` discovery is unavailable or incomplete.
+- Direct API presets use the provider endpoint model IDs such as `glm-5`, `kimi-k2.5`, and `minimax-m2.5`. They do **not** use OpenCode CLI model IDs like `opencode-go/<model-id>`.
+- Alibaba's Coding Plan keys are intended for the interactive coding tool flow. Review the provider documentation before reusing those keys in other environments.
+
 Claw-Empire supports three provider paths:
 
 - **CLI tools** — install local coding CLIs and run tasks through local processes

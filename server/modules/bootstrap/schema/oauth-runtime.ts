@@ -168,7 +168,9 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
   try {
     const apiProvSql =
       (db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='api_providers'").get() as any)?.sql ?? "";
-    if (apiProvSql && !apiProvSql.includes("'cerebras'")) {
+    const apiProvCols = db.prepare("PRAGMA table_info(api_providers)").all() as Array<{ name: string }>;
+    const hasPresetKey = apiProvCols.some((c) => c.name === "preset_key");
+    if (apiProvSql && (!apiProvSql.includes("'cerebras'") || !hasPresetKey)) {
       db.exec(`
       CREATE TABLE IF NOT EXISTS api_providers_new (
         id TEXT PRIMARY KEY,
@@ -176,13 +178,21 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
         type TEXT NOT NULL DEFAULT 'openai' CHECK(type IN ('openai','anthropic','google','ollama','openrouter','together','groq','cerebras','custom')),
         base_url TEXT NOT NULL,
         api_key_enc TEXT,
+        preset_key TEXT,
         enabled INTEGER NOT NULL DEFAULT 1,
         models_cache TEXT,
         models_cached_at INTEGER,
         created_at INTEGER DEFAULT (unixepoch()*1000),
         updated_at INTEGER DEFAULT (unixepoch()*1000)
       );
-      INSERT INTO api_providers_new SELECT * FROM api_providers;
+      INSERT INTO api_providers_new (
+        id, name, type, base_url, api_key_enc, preset_key, enabled,
+        models_cache, models_cached_at, created_at, updated_at
+      )
+      SELECT
+        id, name, type, base_url, api_key_enc, ${hasPresetKey ? "preset_key" : "NULL"},
+        enabled, models_cache, models_cached_at, created_at, updated_at
+      FROM api_providers;
       DROP TABLE api_providers;
       ALTER TABLE api_providers_new RENAME TO api_providers;
     `);

@@ -18,6 +18,10 @@ const VIDEO_OUTPUT_DIR = "video_output";
 const REMOTION_OUTPUT_DIR = "out";
 const LEGACY_VIDEO_FILENAME = "final.mp4";
 
+function joinRelativePath(...segments: string[]): string {
+  return path.posix.join(...segments);
+}
+
 function normalizeSegment(raw: unknown, fallback: string): string {
   const base = String(raw ?? "").trim();
   if (!base) return fallback;
@@ -42,8 +46,8 @@ export function resolveVideoArtifactSpec(input: {
   const fileName = buildVideoArtifactFileName(input.projectName ?? null, input.departmentName ?? null);
   return {
     fileName,
-    relativePath: path.join(VIDEO_OUTPUT_DIR, fileName),
-    legacyRelativePath: path.join(VIDEO_OUTPUT_DIR, LEGACY_VIDEO_FILENAME),
+    relativePath: joinRelativePath(VIDEO_OUTPUT_DIR, fileName),
+    legacyRelativePath: joinRelativePath(VIDEO_OUTPUT_DIR, LEGACY_VIDEO_FILENAME),
   };
 }
 
@@ -109,8 +113,8 @@ export function resolveVideoArtifactRelativeCandidates(spec: VideoArtifactSpec):
     spec.relativePath,
     spec.legacyRelativePath,
     // Remotion default output directory candidates
-    path.join(REMOTION_OUTPUT_DIR, spec.fileName),
-    path.join(REMOTION_OUTPUT_DIR, LEGACY_VIDEO_FILENAME),
+    joinRelativePath(REMOTION_OUTPUT_DIR, spec.fileName),
+    joinRelativePath(REMOTION_OUTPUT_DIR, LEGACY_VIDEO_FILENAME),
   ]) {
     const normalized = String(candidate || "").trim();
     if (!normalized || seen.has(normalized)) continue;
