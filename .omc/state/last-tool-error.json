@@ -1,0 +1,7 @@
+{
+  "tool_name": "Read",
+  "tool_input_preview": "{\"file_path\":\"/Users/fujimototakashi/claude-work/keiba事業/デザイン部/output/create_posts_v3.py\"}",
+  "error": "File does not exist. Note: your current working directory is /Users/fujimototakashi/claw-empire/claw-empire.",
+  "timestamp": "2026-04-15T13:32:21.814Z",
+  "retry_count": 1
+}

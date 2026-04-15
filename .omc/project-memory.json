@@ -1,0 +1,321 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776259672869,
+  "projectRoot": "/Users/fujimototakashi/claw-empire/claw-empire",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=22",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "express",
+        "version": "5.2.1",
+        "category": "backend"
+      },
+      {
+        "name": "react",
+        "version": "19.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "@playwright/test",
+        "version": "1.54.0",
+        "category": "testing"
+      },
+      {
+        "name": "playwright",
+        "version": "1.58.2",
+        "category": "testing"
+      },
+      {
+        "name": "vite",
+        "version": "7.2.4",
+        "category": "build"
+      },
+      {
+        "name": "vitest",
+        "version": "3.0.3",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": "Node.js 22"
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": "pnpm test",
+    "lintCommand": "pnpm lint",
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "migrate:v1.0.5": "node scripts/auto-apply-v1.0.5.mjs",
+      "migrate:custom-skills": "node scripts/migrate-custom-skills-canonical.mjs",
+      "predev": "node scripts/auto-apply-v1.0.5.mjs",
+      "predev:local": "node scripts/auto-apply-v1.0.5.mjs",
+      "predev:e2e": "node scripts/auto-apply-v1.0.5.mjs",
+      "predev:tailscale": "node scripts/auto-apply-v1.0.5.mjs",
+      "prestart": "node scripts/auto-apply-v1.0.5.mjs && node scripts/ensure-remotion-runtime.mjs",
+      "prestart:tailscale": "node scripts/auto-apply-v1.0.5.mjs && node scripts/ensure-remotion-runtime.mjs",
+      "dev": "concurrently -n web,api -c cyan,magenta \"cross-env VITE_DEV=1 vite --host 0.0.0.0 --port 8800\" \"cross-env VITE_DEV=1 HOST=0.0.0.0 nodemon --watch server --ext ts --exec tsx server/index.ts\"",
+      "dev:local": "concurrently -n web,api -c cyan,magenta \"cross-env VITE_DEV=1 vite --host 127.0.0.1 --port 8800\" \"cross-env VITE_DEV=1 HOST=127.0.0.1 nodemon --watch server --ext ts --exec tsx server/index.ts\"",
+      "dev:e2e": "node scripts/prepare-e2e-runtime.mjs && cross-env VITE_DEV=1 HOST=127.0.0.1 DB_PATH=.tmp/e2e-runtime/claw-empire.e2e.sqlite LOGS_DIR=.tmp/e2e-runtime/logs INBOX_WEBHOOK_SECRET=claw-e2e-inbox-secret concurrently -n web,api -c cyan,magenta \"vite --host 127.0.0.1 --port 8810\" \"nodemon --watch server --ext ts --exec tsx server/index.ts\"",
+      "dev:tailscale": "concurrently -n web,api -c cyan,magenta \"cross-env VITE_DEV=1 vite --host 0.0.0.0 --port 8800\" \"cross-env VITE_DEV=1 HOST=0.0.0.0 nodemon --watch server --ext ts --exec tsx server/index.ts\"",
+      "start": "tsx server/index.ts",
+      "start:tailscale": "cross-env HOST=0.0.0.0 tsx server/index.ts",
+      "build": "tsc -b && vite build",
+      "preview": "vite preview",
+      "setup": "node scripts/setup.mjs",
+      "arch:map": "node scripts/generate-architecture-report.mjs",
+      "preflight:public": "bash scripts/preflight-public.sh",
+      "audit:verify": "node scripts/verify-security-audit-log.mjs",
+      "test:comm:llm": "node scripts/qa/llm-comm-test.mjs",
+      "test:comm:oauth": "node scripts/qa/oauth-comm-test.mjs",
+      "test:comm:api": "node scripts/qa/api-comm-test.mjs",
+      "test:comm:suite": "node scripts/qa/run-comm-suite.mjs",
+      "test:comm-status": "node scripts/test-comm-status.mjs",
+      "test:qa:office:smoke": "node scripts/qa/office-console-smoke.mjs",
+      "test:qa:office:perf": "node scripts/qa/office-performance-baseline.mjs",
+      "test:qa:office:resolutions": "node scripts/qa/office-resolution-compare.mjs",
+      "test:qa:office:management": "node scripts/qa/office-management-requirements.mjs",
+      "test:qa:office:theme": "node scripts/qa/office-theme-requirements.mjs",
+      "test:qa:project-path": "node scripts/qa/project-path-api-smoke.mjs",
+      "test:web": "vitest --config vitest.config.ts",
+      "test:api": "vitest --config server/vitest.config.ts",
+      "test:e2e": "node scripts/run-e2e.mjs",
+      "test": "pnpm run test:web && pnpm run test:api",
+      "test:ci": "pnpm run test:web --coverage && pnpm run test:api --coverage && pnpm run openapi:check && pnpm run test:e2e",
+      "lint": "eslint src server",
+      "lint:fix": "eslint src server --fix",
+      "lint:staged": "lint-staged",
+      "openapi:sync": "node scripts/openapi-contract.mjs --write",
+      "openapi:check": "node scripts/openapi-contract.mjs --check",
+      "format": "prettier --write \"**/*.{ts,tsx,js,mjs,cjs,json,yml,yaml,css,scss,html}\"",
+      "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,cjs,json,yml,yaml,css,scss,html}\""
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "public",
+      "scripts",
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "Sample_Img": {
+      "path": "Sample_Img",
+      "purpose": null,
+      "fileCount": 23,
+      "lastAccessed": 1776259672845,
+      "keyFiles": [
+        "CLI.png",
+        "Dashboard.png",
+        "Idle_CLI_view.png",
+        "Kanban.png",
+        "Meeting_Minutes.png"
+      ]
+    },
+    "deploy": {
+      "path": "deploy",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1776259672845,
+      "keyFiles": [
+        "README.md",
+        "claw-empire@.service"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 6,
+      "lastAccessed": 1776259672856,
+      "keyFiles": [
+        "DESIGN.md",
+        "DESIGN_SKILLS.md",
+        "api.md",
+        "decision-inbox-checkpoint-2026-02-22.md",
+        "openapi.json"
+      ]
+    },
+    "logs": {
+      "path": "logs",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776259672856,
+      "keyFiles": [
+        "e107db84-aaf2-405f-92a0-e5f8c4055442.log"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 4,
+      "lastAccessed": 1776259672856,
+      "keyFiles": [
+        "claw-empire.png",
+        "claw-empire.svg",
+        "climpire.svg"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 20,
+      "lastAccessed": 1776259672856,
+      "keyFiles": [
+        "auto-apply-v1.0.5.mjs",
+        "cleanup-staff.mjs",
+        "convert-slides.mjs",
+        "ensure-remotion-runtime.mjs",
+        "generate-architecture-report.mjs"
+      ]
+    },
+    "server": {
+      "path": "server",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1776259672857,
+      "keyFiles": [
+        "index.ts",
+        "server-main.ts",
+        "vitest.config.ts"
+      ]
+    },
+    "slides": {
+      "path": "slides",
+      "purpose": null,
+      "fileCount": 14,
+      "lastAccessed": 1776259672857,
+      "keyFiles": [
+        "generate-pptx.mjs",
+        "html2pptx.cjs",
+        "slide-01.html",
+        "slide-02.html",
+        "slide-03.html"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 11,
+      "lastAccessed": 1776259672859,
+      "keyFiles": [
+        "App.tsx",
+        "ThemeContext.tsx",
+        "api-provider-presets.test.ts",
+        "api.test.ts",
+        "api.ts"
+      ]
+    },
+    "templates": {
+      "path": "templates",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776259672860,
+      "keyFiles": [
+        "AGENTS-empire.md"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 1,
+      "lastAccessed": 1776259672861,
+      "keyFiles": []
+    },
+    "tools": {
+      "path": "tools",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776259672861,
+      "keyFiles": []
+    },
+    "server/config": {
+      "path": "server/config",
+      "purpose": "Configuration files",
+      "fileCount": 1,
+      "lastAccessed": 1776259672862,
+      "keyFiles": [
+        "runtime.ts"
+      ]
+    },
+    "server/scripts": {
+      "path": "server/scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1776259672863,
+      "keyFiles": [
+        "cleanup-staff.test.ts"
+      ]
+    },
+    "src/api": {
+      "path": "src/api",
+      "purpose": "API routes",
+      "fileCount": 5,
+      "lastAccessed": 1776259672863,
+      "keyFiles": [
+        "core.ts",
+        "messaging-runtime-oauth.ts",
+        "organization-projects.ts"
+      ]
+    },
+    "src/app": {
+      "path": "src/app",
+      "purpose": "Application code",
+      "fileCount": 24,
+      "lastAccessed": 1776259672863,
+      "keyFiles": [
+        "AppHeaderBar.mobile-office-pack.test.tsx",
+        "AppHeaderBar.tsx",
+        "AppLoadingScreen.tsx"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 27,
+      "lastAccessed": 1776259672863,
+      "keyFiles": [
+        "AgentAvatar.tsx",
+        "AgentDetail.tsx",
+        "AgentManager.tsx"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

@@ -1,0 +1,17 @@
+{
+  "agents": [
+    {
+      "agent_id": "a320a7ba76c559251",
+      "agent_type": "keiba-post-creator",
+      "started_at": "2026-04-15T13:32:17.431Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-15T13:41:52.559Z",
+      "duration_ms": 575128
+    }
+  ],
+  "total_spawned": 1,
+  "total_completed": 1,
+  "total_failed": 0,
+  "last_updated": "2026-04-15T13:41:52.662Z"
+}
