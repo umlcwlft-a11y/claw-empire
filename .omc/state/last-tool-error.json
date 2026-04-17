@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"find /Users/fujimototakashi -name \\\"gen_corrected_ev.py\\\" 2>/dev/null; find /Users/fujimototakashi -name \\\"*.md\\\" -path \\\"*/keiba*\\\" 2>/dev/null; ls /tmp/corrected_ev_*.json 2>/dev/null\",\"...",
+  "error": "Exit code 1\n/Users/fujimototakashi/keiba_system/README.md\n/Users/fujimototakashi/keiba_system/.venv/lib/python3.14/site-packages/pip/_vendor/idna/LICENSE.md\n/Users/fujimototakashi/keiba_system/.venv/lib/python3.14/site-packages/pip-26.0.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md\n/Users/fujimototakashi/.claude/agents/keiba-post-creator.md\n/Users/fujimototakashi/.claude/agents/keiba-predict.md\n/Users/fujimototakashi/keiba_system_v5_0321/README.md\n/Users/fujimototakashi/Documents/keiba_syst...",
+  "timestamp": "2026-04-17T00:08:07.175Z",
+  "retry_count": 1
+}

@@ -1,0 +1,10 @@
+{
+  "active": true,
+  "started_at": "2026-04-17T00:45:23.527Z",
+  "original_prompt": "/autopilot 皐月賞と同じようにアンタレスステークスの長尺動画とその動画の紹介ショート動画を以下のページから情報取得し制作して下さい。\nhttps://www.umarand.com/gone/sonota/antares-data/\n\n制作物一覧\n・長尺動画\n・ショート動画（長尺動画の簡単な紹介）\n・各ナレーション原稿\n・各投稿文",
+  "session_id": "dd79907d-61f2-468c-a6a2-b46622d6c46a",
+  "project_path": "/Users/fujimototakashi/claw-empire/claw-empire",
+  "reinforcement_count": 0,
+  "awaiting_confirmation": true,
+  "last_checked_at": "2026-04-17T00:45:23.531Z"
+}
